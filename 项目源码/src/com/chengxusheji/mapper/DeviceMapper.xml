@@ -1,0 +1,49 @@
+﻿<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace命名空间，为了对sql语句进行隔离，方便管理，mapper开发dao方式，使用namespace有特殊作用  
+mapper代理开发时将namespace指定为mapper接口的全限定名  
+ -->
+<mapper namespace="com.chengxusheji.mapper.DeviceMapper"> 
+<!--在mapper.xml文件中配置很多的sql语句，执行每个sql语句时，封装为MappedStatement对象 
+mapper.xml以statement为单位管理sql语句  
+ -->
+	<!-- 添加仪器设备记录 -->
+	<insert id="addDevice" parameterType="device">
+		insert into t_device(deviceTypeObj,deviceName,devicePhoto,guige,deviceState,useDate,jxzq,ssdw,jhsj,deviceDesc) values 
+		(#{deviceTypeObj.typeId},#{deviceName},#{devicePhoto},#{guige},#{deviceState},#{useDate},#{jxzq},#{ssdw},#{jhsj},#{deviceDesc})
+	</insert>
+
+	<!-- 按照查询条件分页查询仪器设备记录 -->
+	<select id="queryDevice" resultMap="deviceMap" >
+		select t_device.* from t_device,t_deviceType ${where} and t_device.deviceTypeObj = t_deviceType.typeId limit #{startIndex},#{pageSize}
+	</select>
+	<resultMap id="deviceMap" type="device">
+        <id property="deviceId" column="deviceId" />
+        <association property="deviceTypeObj" column="deviceTypeObj" select="com.chengxusheji.mapper.DeviceTypeMapper.getDeviceType" />
+    </resultMap>
+
+    <!-- 按照查询条件查询所有仪器设备记录 -->
+	<select id="queryDeviceList" resultMap="deviceMap" >
+		select t_device.* from t_device,t_deviceType ${where} and t_device.deviceTypeObj = t_deviceType.typeId
+	</select>
+
+    <!-- 按照查询条件的仪器设备记录数 -->
+	<select id="queryDeviceCount" resultType="int">
+		select count(*) from t_device,t_deviceType ${where} and t_device.deviceTypeObj = t_deviceType.typeId
+	</select>
+
+	<!-- 根据主键查询某个仪器设备记录 -->
+	<select id="getDevice" parameterType="int" resultMap="deviceMap">
+		select * from t_device where t_device.deviceId = #{deviceId}
+	</select>
+
+	<!-- 更新仪器设备记录 -->
+	<update id="updateDevice" parameterType="device">
+		update t_device set deviceTypeObj=#{deviceTypeObj.typeId},deviceName=#{deviceName},devicePhoto=#{devicePhoto},guige=#{guige},deviceState=#{deviceState},useDate=#{useDate},jxzq=#{jxzq},ssdw=#{ssdw},jhsj=#{jhsj},deviceDesc=#{deviceDesc} where deviceId = #{deviceId}
+	</update>
+
+	<!-- 删除仪器设备记录 -->
+	<delete id="deleteDevice" parameterType="int">
+		delete from t_device where deviceId=#{deviceId}
+	</delete>
+
+</mapper>

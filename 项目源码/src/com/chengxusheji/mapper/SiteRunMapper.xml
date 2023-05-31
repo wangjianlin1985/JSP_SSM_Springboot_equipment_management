@@ -1,0 +1,48 @@
+﻿<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace命名空间，为了对sql语句进行隔离，方便管理，mapper开发dao方式，使用namespace有特殊作用  
+mapper代理开发时将namespace指定为mapper接口的全限定名  
+ -->
+<mapper namespace="com.chengxusheji.mapper.SiteRunMapper"> 
+<!--在mapper.xml文件中配置很多的sql语句，执行每个sql语句时，封装为MappedStatement对象 
+mapper.xml以statement为单位管理sql语句  
+ -->
+	<!-- 添加运行情况记录 -->
+	<insert id="addSiteRun" parameterType="siteRun">
+		insert into t_siteRun(ssdw,zddh,zdlb,zdmc,gzlx,gzsj,gzsc,hfqk) values 
+		(#{ssdw},#{zddh},#{zdlb},#{zdmc},#{gzlx},#{gzsj},#{gzsc},#{hfqk})
+	</insert>
+
+	<!-- 按照查询条件分页查询运行情况记录 -->
+	<select id="querySiteRun" resultMap="siteRunMap" >
+		select t_siteRun.* from t_siteRun ${where} limit #{startIndex},#{pageSize}
+	</select>
+	<resultMap id="siteRunMap" type="siteRun">
+        <id property="siteRunId" column="siteRunId" />
+    </resultMap>
+
+    <!-- 按照查询条件查询所有运行情况记录 -->
+	<select id="querySiteRunList" resultMap="siteRunMap" >
+		select t_siteRun.* from t_siteRun ${where}
+	</select>
+
+    <!-- 按照查询条件的运行情况记录数 -->
+	<select id="querySiteRunCount" resultType="int">
+		select count(*) from t_siteRun ${where}
+	</select>
+
+	<!-- 根据主键查询某个运行情况记录 -->
+	<select id="getSiteRun" parameterType="int" resultMap="siteRunMap">
+		select * from t_siteRun where t_siteRun.siteRunId = #{siteRunId}
+	</select>
+
+	<!-- 更新运行情况记录 -->
+	<update id="updateSiteRun" parameterType="siteRun">
+		update t_siteRun set ssdw=#{ssdw},zddh=#{zddh},zdlb=#{zdlb},zdmc=#{zdmc},gzlx=#{gzlx},gzsj=#{gzsj},gzsc=#{gzsc},hfqk=#{hfqk} where siteRunId = #{siteRunId}
+	</update>
+
+	<!-- 删除运行情况记录 -->
+	<delete id="deleteSiteRun" parameterType="int">
+		delete from t_siteRun where siteRunId=#{siteRunId}
+	</delete>
+
+</mapper>

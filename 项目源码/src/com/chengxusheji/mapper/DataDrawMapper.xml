@@ -1,0 +1,48 @@
+﻿<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace命名空间，为了对sql语句进行隔离，方便管理，mapper开发dao方式，使用namespace有特殊作用  
+mapper代理开发时将namespace指定为mapper接口的全限定名  
+ -->
+<mapper namespace="com.chengxusheji.mapper.DataDrawMapper"> 
+<!--在mapper.xml文件中配置很多的sql语句，执行每个sql语句时，封装为MappedStatement对象 
+mapper.xml以statement为单位管理sql语句  
+ -->
+	<!-- 添加资料图纸记录 -->
+	<insert id="addDataDraw" parameterType="dataDraw">
+		insert into t_dataDraw(ssdw,drawClass,drawName,drawDesc,drawFile) values 
+		(#{ssdw},#{drawClass},#{drawName},#{drawDesc},#{drawFile})
+	</insert>
+
+	<!-- 按照查询条件分页查询资料图纸记录 -->
+	<select id="queryDataDraw" resultMap="dataDrawMap" >
+		select t_dataDraw.* from t_dataDraw ${where} limit #{startIndex},#{pageSize}
+	</select>
+	<resultMap id="dataDrawMap" type="dataDraw">
+        <id property="drawId" column="drawId" />
+    </resultMap>
+
+    <!-- 按照查询条件查询所有资料图纸记录 -->
+	<select id="queryDataDrawList" resultMap="dataDrawMap" >
+		select t_dataDraw.* from t_dataDraw ${where}
+	</select>
+
+    <!-- 按照查询条件的资料图纸记录数 -->
+	<select id="queryDataDrawCount" resultType="int">
+		select count(*) from t_dataDraw ${where}
+	</select>
+
+	<!-- 根据主键查询某个资料图纸记录 -->
+	<select id="getDataDraw" parameterType="int" resultMap="dataDrawMap">
+		select * from t_dataDraw where t_dataDraw.drawId = #{drawId}
+	</select>
+
+	<!-- 更新资料图纸记录 -->
+	<update id="updateDataDraw" parameterType="dataDraw">
+		update t_dataDraw set ssdw=#{ssdw},drawClass=#{drawClass},drawName=#{drawName},drawDesc=#{drawDesc},drawFile=#{drawFile} where drawId = #{drawId}
+	</update>
+
+	<!-- 删除资料图纸记录 -->
+	<delete id="deleteDataDraw" parameterType="int">
+		delete from t_dataDraw where drawId=#{drawId}
+	</delete>
+
+</mapper>

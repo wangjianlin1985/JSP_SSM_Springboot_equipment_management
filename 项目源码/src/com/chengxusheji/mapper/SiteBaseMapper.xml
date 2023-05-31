@@ -1,0 +1,48 @@
+﻿<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace命名空间，为了对sql语句进行隔离，方便管理，mapper开发dao方式，使用namespace有特殊作用  
+mapper代理开发时将namespace指定为mapper接口的全限定名  
+ -->
+<mapper namespace="com.chengxusheji.mapper.SiteBaseMapper"> 
+<!--在mapper.xml文件中配置很多的sql语句，执行每个sql语句时，封装为MappedStatement对象 
+mapper.xml以statement为单位管理sql语句  
+ -->
+	<!-- 添加站点基本信息记录 -->
+	<insert id="addSiteBase" parameterType="siteBase">
+		insert into t_siteBase(ssdw,gsd,zddh,zdmc,zdlb,txfs,zzdd,longitude,latitude) values 
+		(#{ssdw},#{gsd},#{zddh},#{zdmc},#{zdlb},#{txfs},#{zzdd},#{longitude},#{latitude})
+	</insert>
+
+	<!-- 按照查询条件分页查询站点基本信息记录 -->
+	<select id="querySiteBase" resultMap="siteBaseMap" >
+		select t_siteBase.* from t_siteBase ${where} limit #{startIndex},#{pageSize}
+	</select>
+	<resultMap id="siteBaseMap" type="siteBase">
+        <id property="siteBaseId" column="siteBaseId" />
+    </resultMap>
+
+    <!-- 按照查询条件查询所有站点基本信息记录 -->
+	<select id="querySiteBaseList" resultMap="siteBaseMap" >
+		select t_siteBase.* from t_siteBase ${where}
+	</select>
+
+    <!-- 按照查询条件的站点基本信息记录数 -->
+	<select id="querySiteBaseCount" resultType="int">
+		select count(*) from t_siteBase ${where}
+	</select>
+
+	<!-- 根据主键查询某个站点基本信息记录 -->
+	<select id="getSiteBase" parameterType="int" resultMap="siteBaseMap">
+		select * from t_siteBase where t_siteBase.siteBaseId = #{siteBaseId}
+	</select>
+
+	<!-- 更新站点基本信息记录 -->
+	<update id="updateSiteBase" parameterType="siteBase">
+		update t_siteBase set ssdw=#{ssdw},gsd=#{gsd},zddh=#{zddh},zdmc=#{zdmc},zdlb=#{zdlb},txfs=#{txfs},zzdd=#{zzdd},longitude=#{longitude},latitude=#{latitude} where siteBaseId = #{siteBaseId}
+	</update>
+
+	<!-- 删除站点基本信息记录 -->
+	<delete id="deleteSiteBase" parameterType="int">
+		delete from t_siteBase where siteBaseId=#{siteBaseId}
+	</delete>
+
+</mapper>
